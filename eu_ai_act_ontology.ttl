@@ -1,0 +1,615 @@
+@prefix : <https://w3id.org/euaiact/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+############################
+# Ontology Declaration
+############################
+
+<https://w3id.org/euaiact/ontology>
+    a owl:Ontology ;
+    dcterms:title "EU AI Act Ontology"@en ;
+    dcterms:description "A proof-of-concept ontology modelling the key concepts, actors, risk categories, prohibited practices, and obligations defined in Regulation (EU) 2024/1689 — the EU Artificial Intelligence Act."@en ;
+    dcterms:source <https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689> ;
+    dcterms:date "2024-07-12"^^xsd:date ;
+    owl:versionInfo "1.0.0" .
+
+
+############################
+# Classes — AI System Types
+############################
+
+:AISystem
+    a owl:Class ;
+    rdfs:label "AI System"@en ;
+    skos:definition "A machine-based system designed to operate with varying levels of autonomy that may exhibit adaptiveness after deployment, and that infers outputs such as predictions, content, recommendations, or decisions from its inputs."@en ;
+    skos:scopeNote "Defined in Article 3(1) of Regulation (EU) 2024/1689."@en .
+
+:HighRiskAISystem
+    a owl:Class ;
+    rdfs:subClassOf :AISystem ;
+    rdfs:label "High-Risk AI System"@en ;
+    skos:definition "An AI system that poses significant risks to health, safety, or fundamental rights, classified under Article 6 or listed in Annex III of the EU AI Act."@en ;
+    skos:scopeNote "Defined in Article 6 and Annex III of Regulation (EU) 2024/1689."@en .
+
+:ProhibitedAISystem
+    a owl:Class ;
+    rdfs:subClassOf :AISystem ;
+    rdfs:label "Prohibited AI System"@en ;
+    skos:definition "An AI system whose placing on the market, putting into service, or use is forbidden under Article 5 of the EU AI Act."@en ;
+    skos:scopeNote "Defined in Article 5 of Regulation (EU) 2024/1689."@en .
+
+:LimitedRiskAISystem
+    a owl:Class ;
+    rdfs:subClassOf :AISystem ;
+    rdfs:label "Limited-Risk AI System"@en ;
+    skos:definition "An AI system subject only to transparency obligations, such as chatbots and deepfake-generating systems."@en ;
+    skos:scopeNote "Covered in Article 50 of Regulation (EU) 2024/1689."@en .
+
+:MinimalRiskAISystem
+    a owl:Class ;
+    rdfs:subClassOf :AISystem ;
+    rdfs:label "Minimal-Risk AI System"@en ;
+    skos:definition "An AI system that poses minimal or no risk to rights or safety and is not subject to mandatory requirements under the Act, e.g. spam filters or AI in video games."@en .
+
+:GeneralPurposeAIModel
+    a owl:Class ;
+    rdfs:label "General-Purpose AI Model"@en ;
+    skos:definition "An AI model trained on large amounts of data that displays significant generality and can competently perform a wide range of distinct tasks, capable of integration into a variety of downstream systems."@en ;
+    skos:scopeNote "Defined in Article 3(63) of Regulation (EU) 2024/1689."@en .
+
+:GeneralPurposeAISystem
+    a owl:Class ;
+    rdfs:subClassOf :AISystem ;
+    rdfs:label "General-Purpose AI System"@en ;
+    skos:definition "An AI system based on a general-purpose AI model, capable of serving a variety of purposes both for direct use and for integration in other AI systems."@en ;
+    skos:scopeNote "Defined in Article 3(66) of Regulation (EU) 2024/1689."@en .
+
+:SystemicRiskGPAIModel
+    a owl:Class ;
+    rdfs:subClassOf :GeneralPurposeAIModel ;
+    rdfs:label "Systemic-Risk GPAI Model"@en ;
+    skos:definition "A general-purpose AI model with high-impact capabilities that may cause significant negative effects on public health, safety, fundamental rights, or society at scale."@en ;
+    skos:scopeNote "Defined in Article 3(65) and Chapter V, Section 2 of Regulation (EU) 2024/1689."@en .
+
+:BiometricIdentificationSystem
+    a owl:Class ;
+    rdfs:subClassOf :AISystem ;
+    rdfs:label "Biometric Identification System"@en ;
+    skos:definition "An AI system for the automated recognition of physical, physiological, behavioural, or psychological human features to establish the identity of a natural person."@en ;
+    skos:scopeNote "Defined in Article 3(35) of Regulation (EU) 2024/1689."@en .
+
+:RealTimeRemoteBiometricSystem
+    a owl:Class ;
+    rdfs:subClassOf :BiometricIdentificationSystem ;
+    rdfs:subClassOf :ProhibitedAISystem ;
+    rdfs:label "Real-Time Remote Biometric Identification System"@en ;
+    skos:definition "A remote biometric identification system capturing biometric data, comparing, and identifying individuals in near real time in publicly accessible spaces for law enforcement purposes — generally prohibited with narrow exceptions."@en ;
+    skos:scopeNote "Article 5(1)(h) of Regulation (EU) 2024/1689."@en .
+
+:EmotionRecognitionSystem
+    a owl:Class ;
+    rdfs:subClassOf :AISystem ;
+    rdfs:label "Emotion Recognition System"@en ;
+    skos:definition "An AI system for identifying or inferring emotions or intentions of natural persons on the basis of their biometric data."@en ;
+    skos:scopeNote "Defined in Article 3(39) of Regulation (EU) 2024/1689."@en .
+
+:DeepFakeSystem
+    a owl:Class ;
+    rdfs:subClassOf :LimitedRiskAISystem ;
+    rdfs:label "Deep Fake System"@en ;
+    skos:definition "An AI system generating or manipulating image, audio, or video content that resembles existing persons or events and would falsely appear authentic."@en ;
+    skos:scopeNote "Defined in Article 3(60); transparency obligations in Article 50 of Regulation (EU) 2024/1689."@en .
+
+
+############################
+# Classes — Actors / Operators
+############################
+
+:Operator
+    a owl:Class ;
+    rdfs:label "Operator"@en ;
+    skos:definition "Any natural or legal person that is a provider, product manufacturer, deployer, authorised representative, importer, or distributor of an AI system."@en ;
+    skos:scopeNote "Defined in Article 3(8) of Regulation (EU) 2024/1689."@en .
+
+:Provider
+    a owl:Class ;
+    rdfs:subClassOf :Operator ;
+    rdfs:label "Provider"@en ;
+    skos:definition "A natural or legal person, public authority, agency, or other body that develops or has developed an AI system or GPAI model and places it on the market or puts it into service under its own name or trademark."@en ;
+    skos:scopeNote "Defined in Article 3(3) of Regulation (EU) 2024/1689."@en .
+
+:Deployer
+    a owl:Class ;
+    rdfs:subClassOf :Operator ;
+    rdfs:label "Deployer"@en ;
+    skos:definition "A natural or legal person, public authority, agency, or other body using an AI system under its authority, except where it is used in the course of a personal non-professional activity."@en ;
+    skos:scopeNote "Defined in Article 3(4) of Regulation (EU) 2024/1689."@en .
+
+:Importer
+    a owl:Class ;
+    rdfs:subClassOf :Operator ;
+    rdfs:label "Importer"@en ;
+    skos:definition "A natural or legal person located or established in the Union that places on the market an AI system bearing the name or trademark of a person established in a third country."@en ;
+    skos:scopeNote "Defined in Article 3(6) of Regulation (EU) 2024/1689."@en .
+
+:Distributor
+    a owl:Class ;
+    rdfs:subClassOf :Operator ;
+    rdfs:label "Distributor"@en ;
+    skos:definition "A natural or legal person in the supply chain, other than the provider or the importer, that makes an AI system available on the Union market."@en ;
+    skos:scopeNote "Defined in Article 3(7) of Regulation (EU) 2024/1689."@en .
+
+:AuthorisedRepresentative
+    a owl:Class ;
+    rdfs:subClassOf :Operator ;
+    rdfs:label "Authorised Representative"@en ;
+    skos:definition "A natural or legal person located or established in the Union who holds a written mandate from a provider to perform obligations and procedures on the provider's behalf."@en ;
+    skos:scopeNote "Defined in Article 3(5) of Regulation (EU) 2024/1689."@en .
+
+:AffectedPerson
+    a owl:Class ;
+    rdfs:label "Affected Person"@en ;
+    skos:definition "A natural person located in the Union on whom an AI system is used or whose interests are affected by an AI system."@en .
+
+:NationalCompetentAuthority
+    a owl:Class ;
+    rdfs:label "National Competent Authority"@en ;
+    skos:definition "A notifying authority or a market surveillance authority designated by a Member State to supervise the application of the EU AI Act."@en ;
+    skos:scopeNote "Defined in Article 3(48) of Regulation (EU) 2024/1689."@en .
+
+:AIOffice
+    a owl:Class ;
+    rdfs:label "AI Office"@en ;
+    skos:definition "The Commission's function responsible for contributing to the implementation, monitoring, and supervision of AI systems and general-purpose AI models and AI governance at EU level."@en ;
+    skos:scopeNote "Defined in Article 3(47) of Regulation (EU) 2024/1689."@en .
+
+:ConformityAssessmentBody
+    a owl:Class ;
+    rdfs:label "Conformity Assessment Body"@en ;
+    skos:definition "A body that performs third-party conformity assessment activities, including testing, certification, and inspection of AI systems."@en ;
+    skos:scopeNote "Defined in Article 3(21) of Regulation (EU) 2024/1689."@en .
+
+:NotifiedBody
+    a owl:Class ;
+    rdfs:subClassOf :ConformityAssessmentBody ;
+    rdfs:label "Notified Body"@en ;
+    skos:definition "A conformity assessment body notified in accordance with the EU AI Act and other relevant Union harmonisation legislation."@en ;
+    skos:scopeNote "Defined in Article 3(22) of Regulation (EU) 2024/1689."@en .
+
+
+############################
+# Classes — Risk & Obligations
+############################
+
+:RiskCategory
+    a owl:Class ;
+    rdfs:label "Risk Category"@en ;
+    skos:definition "A classification of AI systems according to the level of risk they pose to health, safety, or fundamental rights."@en .
+
+:RiskManagementSystem
+    a owl:Class ;
+    rdfs:label "Risk Management System"@en ;
+    skos:definition "A continuous iterative process planned and run throughout the entire lifecycle of a high-risk AI system to identify, evaluate, and mitigate risks."@en ;
+    skos:scopeNote "Defined in Article 9 of Regulation (EU) 2024/1689."@en .
+
+:Obligation
+    a owl:Class ;
+    rdfs:label "Obligation"@en ;
+    skos:definition "A legal duty imposed on an operator by the EU AI Act."@en .
+
+:TechnicalDocumentation
+    a owl:Class ;
+    rdfs:subClassOf :Obligation ;
+    rdfs:label "Technical Documentation"@en ;
+    skos:definition "Documentation that providers of high-risk AI systems must draw up before placing on the market to demonstrate compliance with requirements."@en ;
+    skos:scopeNote "Article 11 and Annex IV of Regulation (EU) 2024/1689."@en .
+
+:ConformityAssessment
+    a owl:Class ;
+    rdfs:subClassOf :Obligation ;
+    rdfs:label "Conformity Assessment"@en ;
+    skos:definition "The process of demonstrating whether the requirements for a high-risk AI system have been fulfilled before it is placed on the market or put into service."@en ;
+    skos:scopeNote "Article 3(20) and Articles 43–49 of Regulation (EU) 2024/1689."@en .
+
+:FundamentalRightsImpactAssessment
+    a owl:Class ;
+    rdfs:subClassOf :Obligation ;
+    rdfs:label "Fundamental Rights Impact Assessment"@en ;
+    skos:definition "An assessment that deployers of high-risk AI systems in certain public or regulated contexts must carry out to assess impacts on fundamental rights before deployment."@en ;
+    skos:scopeNote "Article 27 of Regulation (EU) 2024/1689."@en .
+
+:TransparencyObligation
+    a owl:Class ;
+    rdfs:subClassOf :Obligation ;
+    rdfs:label "Transparency Obligation"@en ;
+    skos:definition "A duty to disclose that a natural person is interacting with an AI system or that content has been AI-generated, applicable to certain AI systems."@en ;
+    skos:scopeNote "Article 50 of Regulation (EU) 2024/1689."@en .
+
+:PostMarketMonitoring
+    a owl:Class ;
+    rdfs:subClassOf :Obligation ;
+    rdfs:label "Post-Market Monitoring"@en ;
+    skos:definition "Activities carried out by providers of AI systems to collect and review experience gained from use, in order to identify any need for corrective or preventive actions."@en ;
+    skos:scopeNote "Defined in Article 3(25) and Article 72 of Regulation (EU) 2024/1689."@en .
+
+:AILiteracy
+    a owl:Class ;
+    rdfs:label "AI Literacy"@en ;
+    skos:definition "Skills, knowledge and understanding enabling providers, deployers and affected persons to make informed deployment of AI systems and gain awareness of AI opportunities and risks."@en ;
+    skos:scopeNote "Defined in Article 3(56) and mandated in Article 4 of Regulation (EU) 2024/1689."@en .
+
+:ProhibitedPractice
+    a owl:Class ;
+    rdfs:label "Prohibited Practice"@en ;
+    skos:definition "An AI-related practice explicitly forbidden under Article 5 of the EU AI Act."@en ;
+    skos:scopeNote "Article 5 of Regulation (EU) 2024/1689."@en .
+
+:AIRegulatorySandbox
+    a owl:Class ;
+    rdfs:label "AI Regulatory Sandbox"@en ;
+    skos:definition "A controlled framework set up by a competent authority offering providers the possibility to develop, train, validate, and test innovative AI systems under regulatory supervision for a limited time."@en ;
+    skos:scopeNote "Defined in Article 3(55) of Regulation (EU) 2024/1689."@en .
+
+:SerialIncident
+    a owl:Class ;
+    rdfs:label "Serious Incident"@en ;
+    skos:definition "An incident or malfunctioning of an AI system that leads to death, serious harm to persons, disruption of critical infrastructure, infringement of fundamental rights, or serious harm to property or environment."@en ;
+    skos:scopeNote "Defined in Article 3(49) of Regulation (EU) 2024/1689."@en .
+
+:EUDatabase
+    a owl:Class ;
+    rdfs:label "EU Database"@en ;
+    skos:definition "The public EU-level database for the registration of high-risk AI systems before they are placed on the market or put into service, maintained by the Commission."@en ;
+    skos:scopeNote "Article 71 of Regulation (EU) 2024/1689."@en .
+
+:CEMarking
+    a owl:Class ;
+    rdfs:label "CE Marking"@en ;
+    skos:definition "A marking by which a provider indicates that an AI system is in conformity with the requirements of the EU AI Act and other applicable Union harmonisation legislation."@en ;
+    skos:scopeNote "Defined in Article 3(24) of Regulation (EU) 2024/1689."@en .
+
+
+############################
+# Object Properties
+############################
+
+:hasRiskCategory
+    a owl:ObjectProperty ;
+    rdfs:domain :AISystem ;
+    rdfs:range :RiskCategory ;
+    rdfs:label "has risk category"@en ;
+    skos:definition "Associates an AI system with its regulatory risk category."@en .
+
+:hasObligation
+    a owl:ObjectProperty ;
+    rdfs:domain :Operator ;
+    rdfs:range :Obligation ;
+    rdfs:label "has obligation"@en ;
+    skos:definition "Associates an operator with a legal obligation imposed by the EU AI Act."@en .
+
+:obligationAppliesTo
+    a owl:ObjectProperty ;
+    rdfs:domain :Obligation ;
+    rdfs:range :Operator ;
+    rdfs:label "obligation applies to"@en ;
+    skos:definition "Specifies the operator to which a given obligation applies."@en .
+
+:develops
+    a owl:ObjectProperty ;
+    rdfs:domain :Provider ;
+    rdfs:range :AISystem ;
+    rdfs:label "develops"@en ;
+    skos:definition "The provider develops the AI system."@en .
+
+:deploys
+    a owl:ObjectProperty ;
+    rdfs:domain :Deployer ;
+    rdfs:range :AISystem ;
+    rdfs:label "deploys"@en ;
+    skos:definition "The deployer uses or puts into operation the AI system."@en .
+
+:supervisedBy
+    a owl:ObjectProperty ;
+    rdfs:domain :AISystem ;
+    rdfs:range :NationalCompetentAuthority ;
+    rdfs:label "supervised by"@en ;
+    skos:definition "The AI system is subject to oversight by a national competent authority."@en .
+
+:assessedBy
+    a owl:ObjectProperty ;
+    rdfs:domain :HighRiskAISystem ;
+    rdfs:range :ConformityAssessmentBody ;
+    rdfs:label "assessed by"@en ;
+    skos:definition "The high-risk AI system undergoes conformity assessment by this body."@en .
+
+:requiresRiskManagement
+    a owl:ObjectProperty ;
+    rdfs:domain :HighRiskAISystem ;
+    rdfs:range :RiskManagementSystem ;
+    rdfs:label "requires risk management"@en ;
+    skos:definition "A high-risk AI system must have an associated risk management system."@en .
+
+:registeredIn
+    a owl:ObjectProperty ;
+    rdfs:domain :HighRiskAISystem ;
+    rdfs:range :EUDatabase ;
+    rdfs:label "registered in"@en ;
+    skos:definition "The high-risk AI system is registered in the EU database."@en .
+
+:prohibits
+    a owl:ObjectProperty ;
+    rdfs:domain :ProhibitedPractice ;
+    rdfs:range :AISystem ;
+    rdfs:label "prohibits"@en ;
+    skos:definition "A prohibited practice forbids the use or placing on the market of a particular AI system."@en .
+
+:testedIn
+    a owl:ObjectProperty ;
+    rdfs:domain :AISystem ;
+    rdfs:range :AIRegulatorySandbox ;
+    rdfs:label "tested in"@en ;
+    skos:definition "The AI system is developed or tested within an AI regulatory sandbox."@en .
+
+:isBasedOn
+    a owl:ObjectProperty ;
+    rdfs:domain :GeneralPurposeAISystem ;
+    rdfs:range :GeneralPurposeAIModel ;
+    rdfs:label "is based on"@en ;
+    skos:definition "The general-purpose AI system is built on top of a general-purpose AI model."@en .
+
+:carriesCEMarking
+    a owl:ObjectProperty ;
+    rdfs:domain :HighRiskAISystem ;
+    rdfs:range :CEMarking ;
+    rdfs:label "carries CE marking"@en ;
+    skos:definition "A high-risk AI system bears the CE marking after successful conformity assessment."@en .
+
+
+############################
+# Datatype Properties
+############################
+
+:articleReference
+    a owl:DatatypeProperty ;
+    rdfs:label "article reference"@en ;
+    rdfs:range xsd:string ;
+    skos:definition "The specific article(s) of Regulation (EU) 2024/1689 where this concept is defined or governed."@en .
+
+:riskLevel
+    a owl:DatatypeProperty ;
+    rdfs:domain :AISystem ;
+    rdfs:range xsd:string ;
+    rdfs:label "risk level"@en ;
+    skos:definition "A textual descriptor of the risk level: Prohibited, High, Limited, or Minimal."@en .
+
+:isProhibited
+    a owl:DatatypeProperty ;
+    rdfs:domain :AISystem ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "is prohibited"@en ;
+    skos:definition "Indicates whether the AI system or practice is prohibited under Article 5."@en .
+
+:complianceDeadline
+    a owl:DatatypeProperty ;
+    rdfs:domain :Obligation ;
+    rdfs:range xsd:date ;
+    rdfs:label "compliance deadline"@en ;
+    skos:definition "The date by which the obligation must be met."@en .
+
+:systemicRiskThreshold
+    a owl:DatatypeProperty ;
+    rdfs:domain :GeneralPurposeAIModel ;
+    rdfs:range xsd:float ;
+    rdfs:label "systemic risk threshold"@en ;
+    skos:definition "The computational threshold (in floating-point operations) used to classify a GPAI model as having systemic risk — currently 10^25 FLOP."@en ;
+    skos:scopeNote "Article 51(2) of Regulation (EU) 2024/1689."@en .
+
+
+############################
+# Individuals — Risk Categories
+############################
+
+:ProhibitedRisk
+    a :RiskCategory ;
+    rdfs:label "Prohibited Risk"@en ;
+    skos:definition "AI practices that are outright forbidden under Article 5, such as social scoring by public authorities and real-time biometric identification in public spaces."@en ;
+    :articleReference "Article 5" .
+
+:HighRisk
+    a :RiskCategory ;
+    rdfs:label "High Risk"@en ;
+    skos:definition "AI systems that pose significant risk to health, safety, or fundamental rights and are subject to strict requirements (Article 6 and Annex III)."@en ;
+    :articleReference "Article 6, Annex III" .
+
+:LimitedRisk
+    a :RiskCategory ;
+    rdfs:label "Limited Risk"@en ;
+    skos:definition "AI systems subject only to transparency obligations under Article 50, such as chatbots and generative AI."@en ;
+    :articleReference "Article 50" .
+
+:MinimalRisk
+    a :RiskCategory ;
+    rdfs:label "Minimal Risk"@en ;
+    skos:definition "AI systems posing minimal risks and not subject to additional mandatory requirements."@en .
+
+
+############################
+# Individuals — Prohibited Practices
+############################
+
+:SubliminalManipulation
+    a :ProhibitedPractice ;
+    rdfs:label "Subliminal Manipulation"@en ;
+    skos:definition "Deploying AI systems that use subliminal or purposefully manipulative techniques to materially distort a person's behaviour and cause them significant harm."@en ;
+    :articleReference "Article 5(1)(a)" .
+
+:VulnerabilityExploitation
+    a :ProhibitedPractice ;
+    rdfs:label "Exploitation of Vulnerabilities"@en ;
+    skos:definition "Using AI to exploit vulnerabilities of persons due to age, disability, or social/economic situation, distorting their behaviour in harmful ways."@en ;
+    :articleReference "Article 5(1)(b)" .
+
+:SocialScoring
+    a :ProhibitedPractice ;
+    rdfs:label "Social Scoring"@en ;
+    skos:definition "AI-based evaluation or classification of natural persons based on social behaviour or personality characteristics over time, leading to unjustified detrimental treatment."@en ;
+    :articleReference "Article 5(1)(c)" .
+
+:PredictivePolicingRisk
+    a :ProhibitedPractice ;
+    rdfs:label "Predictive Policing Based on Profiling"@en ;
+    skos:definition "Using AI to make risk assessments predicting the likelihood that a natural person will commit a criminal offence, based solely on profiling."@en ;
+    :articleReference "Article 5(1)(d)" .
+
+:UnlawfulFacialRecognitionScraping
+    a :ProhibitedPractice ;
+    rdfs:label "Facial Recognition Database Scraping"@en ;
+    skos:definition "Creating or expanding facial recognition databases through untargeted scraping of facial images from the internet or CCTV footage."@en ;
+    :articleReference "Article 5(1)(e)" .
+
+:EmotionRecognitionWorkplaceEducation
+    a :ProhibitedPractice ;
+    rdfs:label "Emotion Recognition in Workplace/Education"@en ;
+    skos:definition "Using AI to infer the emotions of persons in workplaces or educational institutions, except for medical or safety purposes."@en ;
+    :articleReference "Article 5(1)(f)" .
+
+:BiometricCategorisationProtectedAttributes
+    a :ProhibitedPractice ;
+    rdfs:label "Biometric Categorisation by Protected Attributes"@en ;
+    skos:definition "Using biometric categorisation systems to deduce race, political opinions, trade union membership, religious beliefs, sex life, or sexual orientation."@en ;
+    :articleReference "Article 5(1)(g)" .
+
+
+############################
+# Individuals — Key Obligations
+############################
+
+:RiskMgmtObligation
+    a :Obligation ;
+    rdfs:label "Risk Management System Obligation"@en ;
+    skos:definition "Providers of high-risk AI systems must establish, implement, document, and maintain a risk management system throughout the system's lifecycle."@en ;
+    :articleReference "Article 9" ;
+    :obligationAppliesTo :Provider .
+
+:TechDocObligation
+    a :TechnicalDocumentation , :Obligation ;
+    rdfs:label "Technical Documentation Obligation"@en ;
+    skos:definition "Providers must prepare technical documentation before placing a high-risk AI system on the market."@en ;
+    :articleReference "Article 11, Annex IV" ;
+    :obligationAppliesTo :Provider .
+
+:ConformityAssessmentObligation
+    a :ConformityAssessment , :Obligation ;
+    rdfs:label "Conformity Assessment Obligation"@en ;
+    skos:definition "Providers must carry out a conformity assessment before placing a high-risk AI system on the market or putting it into service."@en ;
+    :articleReference "Articles 43-49" ;
+    :obligationAppliesTo :Provider .
+
+:EUDatabaseRegistrationObligation
+    a :Obligation ;
+    rdfs:label "EU Database Registration Obligation"@en ;
+    skos:definition "Providers of high-risk AI systems must register the system in the EU database before placing it on the market."@en ;
+    :articleReference "Article 49, Article 71" ;
+    :obligationAppliesTo :Provider .
+
+:PostMarketMonitoringObligation
+    a :PostMarketMonitoring , :Obligation ;
+    rdfs:label "Post-Market Monitoring Obligation"@en ;
+    skos:definition "Providers must maintain a post-market monitoring system to collect and review experience from deployed AI systems."@en ;
+    :articleReference "Article 72" ;
+    :obligationAppliesTo :Provider .
+
+:HumanOversightObligation
+    a :Obligation ;
+    rdfs:label "Human Oversight Obligation"@en ;
+    skos:definition "High-risk AI systems must be designed to enable effective human oversight by natural persons during use."@en ;
+    :articleReference "Article 14" ;
+    :obligationAppliesTo :Provider .
+
+:TransparencyObligation_Art50
+    a :TransparencyObligation , :Obligation ;
+    rdfs:label "Transparency Obligation (Art. 50)"@en ;
+    skos:definition "Providers of certain AI systems (e.g. chatbots, deepfakes) must ensure that natural persons are informed they are interacting with AI."@en ;
+    :articleReference "Article 50" ;
+    :obligationAppliesTo :Provider .
+
+:FRIAObligation
+    a :FundamentalRightsImpactAssessment , :Obligation ;
+    rdfs:label "Fundamental Rights Impact Assessment Obligation"@en ;
+    skos:definition "Certain deployers of high-risk AI systems must conduct a fundamental rights impact assessment before deployment."@en ;
+    :articleReference "Article 27" ;
+    :obligationAppliesTo :Deployer .
+
+:AILiteracyObligation
+    a :Obligation ;
+    rdfs:label "AI Literacy Obligation"@en ;
+    skos:definition "Providers and deployers must take measures to ensure a sufficient level of AI literacy among their staff dealing with AI systems."@en ;
+    :articleReference "Article 4" ;
+    :obligationAppliesTo :Provider , :Deployer .
+
+
+############################
+# Individuals — High-Risk Use-Case Areas (Annex III)
+############################
+
+:BiometricIdentificationHighRisk
+    a :HighRiskAISystem ;
+    rdfs:label "Biometric Identification — High Risk"@en ;
+    skos:definition "AI systems for remote biometric identification of natural persons, unless explicitly exempted."@en ;
+    :articleReference "Annex III, Section 1" ;
+    :hasRiskCategory :HighRisk .
+
+:CriticalInfrastructureHighRisk
+    a :HighRiskAISystem ;
+    rdfs:label "Critical Infrastructure Management — High Risk"@en ;
+    skos:definition "AI systems used as safety components in the management and operation of critical infrastructure."@en ;
+    :articleReference "Annex III, Section 2" ;
+    :hasRiskCategory :HighRisk .
+
+:EducationHighRisk
+    a :HighRiskAISystem ;
+    rdfs:label "Education and Vocational Training — High Risk"@en ;
+    skos:definition "AI systems for determining access or assigning persons to educational institutions or evaluating learning outcomes."@en ;
+    :articleReference "Annex III, Section 3" ;
+    :hasRiskCategory :HighRisk .
+
+:EmploymentHighRisk
+    a :HighRiskAISystem ;
+    rdfs:label "Employment and Workers Management — High Risk"@en ;
+    skos:definition "AI systems used in recruitment, task allocation, monitoring, or evaluation of employees."@en ;
+    :articleReference "Annex III, Section 4" ;
+    :hasRiskCategory :HighRisk .
+
+:EssentialServicesHighRisk
+    a :HighRiskAISystem ;
+    rdfs:label "Essential Private and Public Services — High Risk"@en ;
+    skos:definition "AI systems used by public authorities or in essential private services such as creditworthiness assessment or emergency dispatch."@en ;
+    :articleReference "Annex III, Section 5" ;
+    :hasRiskCategory :HighRisk .
+
+:LawEnforcementHighRisk
+    a :HighRiskAISystem ;
+    rdfs:label "Law Enforcement — High Risk"@en ;
+    skos:definition "AI systems used by law enforcement authorities to assess risk of natural persons, detect emotions, or analyse evidence."@en ;
+    :articleReference "Annex III, Section 6" ;
+    :hasRiskCategory :HighRisk .
+
+:MigrationAsylumHighRisk
+    a :HighRiskAISystem ;
+    rdfs:label "Migration, Asylum, Border Control — High Risk"@en ;
+    skos:definition "AI systems used in border management, assessment of applications for asylum or visas, and irregular migration detection."@en ;
+    :articleReference "Annex III, Section 7" ;
+    :hasRiskCategory :HighRisk .
+
+:JusticeHighRisk
+    a :HighRiskAISystem ;
+    rdfs:label "Administration of Justice — High Risk"@en ;
+    skos:definition "AI systems assisting judicial authorities in researching and interpreting facts and law, or in applying the law to specific facts."@en ;
+    :articleReference "Annex III, Section 8" ;
+    :hasRiskCategory :HighRisk .
