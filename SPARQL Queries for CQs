@@ -1,1 +1,55 @@
+SPARQL CQ1:
+PREFIX : <https://w3id.org/euaiact/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?actor ?system
+WHERE {
+  ?actor :hasObligation ?obligation .
+  ?obligation :appliesToSystem ?system .
+  ?system rdf:type :HighRiskAISystem .
+}
 
+
+SPARQL CQ2:
+PREFIX : <https://w3id.org/euaiact/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?provider ?obligation ?system
+WHERE {
+  ?provider rdf:type :Provider .
+  ?provider :hasObligation ?obligation .
+  ?obligation :appliesToSystem ?system .
+  ?system rdf:type :HighRiskAISystem .
+}
+
+SPARQL CQ3:
+PREFIX : <https://w3id.org/euaiact/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?practiceClass
+WHERE {
+  ?practiceClass rdfs:subClassOf :ProhibitedAIPractice .
+}
+
+SPARQL CQ4:
+PREFIX : <https://w3id.org/euaiact/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?provider ?authority
+WHERE {
+  ?provider rdf:type :Provider .
+  ?provider :supervisedBy ?authority .
+}
+
+SPARQL CQ5:
+PREFIX : <https://w3id.org/euaiact/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?documentation
+WHERE {
+  ?provider rdf:type :Provider .
+  ?provider :hasObligation ?obligation .
+  ?obligation :appliesToSystem ?system .
+  ?system rdf:type :HighRiskAISystem .
+  ?obligation :requiresDocumentation ?documentation .
+}
