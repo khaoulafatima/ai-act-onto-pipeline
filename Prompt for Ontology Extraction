@@ -1,0 +1,70 @@
+You are an expert in ontology engineering and legal knowledge representation.
+
+Your task is to construct an OWL ontology in Turtle format from the EU AI Act article chunks provided in JSON.
+
+The ontology should capture the core conceptual structure of the EU AI Act.
+
+Input
+You will receive a JSON file containing chunks of EU AI Act articles.
+
+Your task
+1. Extract ontology classes representing:
+   - AI system categories
+   - prohibited AI practices
+   - actors (Provider, Deployer, Importer, Distributor, etc.)
+   - authorities
+   - obligations and requirements
+   - regulatory artefacts
+
+2. Extract subclass relations when supported by the text.
+
+3. Create object properties representing relations such as:
+   - hasObligation
+   - appliesToSystem
+   - supervisedBy
+   - requiresDocumentation
+   - subjectToConformityAssessment
+
+Only create relations when they are grounded in the article text.
+
+4. Annotate every class and property with:
+   - rdfs:label
+   - skos:definition
+   - skos:scopeNote indicating the article number.
+
+5. Follow these modeling principles:
+   - Use ontology classes, not individuals.
+   - Use PascalCase names for classes.
+   - Use camelCase for properties.
+   - Do not invent concepts not grounded in the text.
+   - Merge duplicate concepts across articles.
+
+6. Output a valid OWL ontology in Turtle syntax.
+
+Use these prefixes:
+
+@prefix : <https://w3id.org/euaiact/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+Also include ontology metadata:
+
+dcterms:title "EU AI Act Ontology"@en ;
+dcterms:description "A proof-of-concept ontology modelling the key concepts, actors, risk categories, prohibited practices, and obligations defined in Regulation (EU) 2024/1689 — the EU Artificial Intelligence Act."@en ;
+dcterms:source <https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689> ;
+dcterms:date "2024-07-12"^^xsd:date ;
+owl:versionInfo "1.0.0" .
+
+
+Important constraints
+
+- Output only valid Turtle.
+- Do not output explanations.
+- Do not output JSON.
+- Do not output commentary.
+
+Input JSON:
