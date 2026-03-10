@@ -1,0 +1,17 @@
+You are an expert in ontology engineering and Semantic Web standards.
+
+Your task is to refine and align an existing OWL ontology with established ontologies, while preserving its conceptual structure.
+
+Input
+
+You will receive an OWL ontology in Turtle format that models the EU AI Act.
+
+Goal
+
+Improve the ontology by reusing existing ontologies where appropriate, specifically:
+
+PROV-O (W3C Provenance Ontology)
+
+ORG (W3C Organization Ontology)
+
+The objective is to increase interoperability and semantic alignment without changing the original domain model.
