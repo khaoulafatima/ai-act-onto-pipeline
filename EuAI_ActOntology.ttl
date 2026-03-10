@@ -6,6 +6,8 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix org: <http://www.w3.org/ns/org#> .
 
 ############################
 # Ontology Declaration
@@ -17,7 +19,9 @@
     dcterms:description "A proof-of-concept ontology modelling the key concepts, actors, risk categories, prohibited practices, and obligations defined in Regulation (EU) 2024/1689 — the EU Artificial Intelligence Act."@en ;
     dcterms:source <https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689> ;
     dcterms:date "2024-07-12"^^xsd:date ;
-    owl:versionInfo "1.0.0" .
+    owl:imports <http://www.w3.org/ns/prov-o#> , <http://www.w3.org/ns/org#> ;
+    dcterms:conformsTo <http://www.w3.org/TR/prov-o/> , <https://www.w3.org/TR/vocab-org/> ;
+    owl:versionInfo "1.1.0-aligned" .
 
 
 ############################
@@ -613,3 +617,90 @@
     skos:definition "AI systems assisting judicial authorities in researching and interpreting facts and law, or in applying the law to specific facts."@en ;
     :articleReference "Annex III, Section 8" ;
     :hasRiskCategory :HighRisk .
+
+
+############################
+# Alignment with PROV-O and ORG
+############################
+
+:AISystem
+    rdfs:subClassOf prov:Entity .
+
+:GeneralPurposeAIModel
+    rdfs:subClassOf prov:Entity .
+
+:Operator
+    rdfs:subClassOf prov:Agent ;
+    skos:scopeNote "Aligned conservatively with prov:Agent because operators may be natural persons, legal persons, public authorities, agencies, or other bodies."@en .
+
+:Provider
+    rdfs:subClassOf prov:Agent .
+
+:Deployer
+    rdfs:subClassOf prov:Agent .
+
+:Importer
+    rdfs:subClassOf prov:Agent .
+
+:Distributor
+    rdfs:subClassOf prov:Agent .
+
+:AuthorisedRepresentative
+    rdfs:subClassOf prov:Agent .
+
+:AffectedPerson
+    rdfs:subClassOf foaf:Person , prov:Agent .
+
+:NationalCompetentAuthority
+    rdfs:subClassOf org:Organization , prov:Agent ;
+    skos:scopeNote "Aligned with org:Organization when the authority is treated as an institutional body rather than an individual office-holder."@en .
+
+:AIOffice
+    rdfs:subClassOf org:Organization , prov:Agent .
+
+:ConformityAssessmentBody
+    rdfs:subClassOf org:Organization , prov:Agent .
+
+:NotifiedBody
+    rdfs:subClassOf org:Organization , prov:Agent .
+
+:TechnicalDocumentation
+    rdfs:subClassOf prov:Entity .
+
+:EUDatabase
+    rdfs:subClassOf prov:Entity .
+
+:CEMarking
+    rdfs:subClassOf prov:Entity .
+
+:RiskManagementSystem
+    rdfs:subClassOf prov:Plan .
+
+:ConformityAssessment
+    rdfs:subClassOf prov:Activity .
+
+:FundamentalRightsImpactAssessment
+    rdfs:subClassOf prov:Activity .
+
+:PostMarketMonitoring
+    rdfs:subClassOf prov:Activity .
+
+:develops
+    a owl:ObjectProperty ;
+    owl:inverseOf prov:wasAttributedTo ;
+    skos:scopeNote "Approximate alignment: if a provider develops an AI system, the system can be attributed to that provider as a prov:Agent. The inverse relation is used to preserve the original direction of the domain-specific property."@en .
+
+:deploys
+    rdfs:subPropertyOf prov:used ;
+    skos:scopeNote "Approximate alignment with prov:used, treating an AI system as a prov:Entity used by a deployer acting as a prov:Agent."@en .
+
+:assessedBy
+    rdfs:subPropertyOf prov:wasAssociatedWith ;
+    skos:scopeNote "Approximate alignment indicating association between the conformity-assessment process around a high-risk AI system and the responsible assessment body."@en .
+
+:articleReference
+    rdfs:subPropertyOf dcterms:references .
+
+<https://w3id.org/euaiact/ontology>
+    prov:wasDerivedFrom <https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689> ;
+    prov:wasAttributedTo :AIOffice .
